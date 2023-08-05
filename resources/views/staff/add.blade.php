@@ -143,7 +143,7 @@ declare(strict_types=1);
 
 @push('scripts')
 <script>
-    const url = 'http://localhost:8000';
+    const url = window.location.origin;
     var ids = {};
     // var students_list = {};
     var sheets_list = {};

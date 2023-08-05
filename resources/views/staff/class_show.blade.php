@@ -63,7 +63,14 @@ declare(strict_types=1);
     /* .div2 { grid-area: 1 / 2 / 2 / 3; } */
     .div3 { grid-area: 1 / 3 / 2 / 4; }
     .div4 { grid-area: 1 / 1 / 2 / 2; }
-    .div5 { grid-area: 2 / 1 / 5 / 5; }
+    .div5 { grid-area: 2 / 1 / 5 / 5; 
+            background-color: #f8f8f8; /* Light gray background */
+            padding: 20px; /* Add some padding around the content */
+            border: 1px solid #ccc; /* Add a border to further separate it from the background */
+            border-radius: 8px; /* Add some border radius to make it look more rounded */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow to give it depth*/
+            height: max-content;
+          }  
     .div6 { grid-area: 1 / 2 / 2 / 3; }
     .div7 { grid-area: 1 / 5 / 9 / 6; 
       max-height: 100vh; /* Set a fixed height as per your requirement */
@@ -71,7 +78,14 @@ declare(strict_types=1);
       border: #cecece 1px solid;
       border-radius: 12px;
     }
-    .div8 { grid-area: 6 / 1 / 9 / 5; } 
+    .div8 { grid-area: 6 / 1 / 9 / 5;
+            background-color: #f8f8f8; /* Light gray background */
+            padding: 20px; /* Add some padding around the content */
+            border: 1px solid #ccc; /* Add a border to further separate it from the background */
+            border-radius: 8px; /* Add some border radius to make it look more rounded */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow to give it depth*/
+            height: max-content;
+          }  
 
                 /* Style the dropdown arrow */
             .custom-select {
@@ -170,7 +184,7 @@ declare(strict_types=1);
               .div5 { grid-area: 2 / 1 / 5 / 5; }
               .div6 { grid-area: 1 / 1 / 2 / 2;  }
               .div7 { grid-area: 1 / 5 / 9 / 6; }
-              .div8 { grid-area: 6 / 1 / 9 / 5; } 
+              .div8 { grid-area: 6 / 1 / 9 / 5; }
             }
             .card-scroll-container {
   overflow-x: auto;
@@ -256,6 +270,7 @@ declare(strict_types=1);
         </div>  
        </div>
       <div class="div7 right">
+        <h3> لائحة الطلاب <h3>
         <table style="width: 100%; margin-top : 20px;"  border="1"> 
          <thead>
            <tr> 
@@ -280,7 +295,7 @@ declare(strict_types=1);
       </div> 
     @push('scripts')
         <script>
-            const url = 'http://localhost:8000';
+            const url = window.location.origin;;
             const data = {!! json_encode($data) !!};
             const user = JSON.parse(`{!! json_encode($user, JSON_HEX_TAG) !!}`);
             $(()=>{
