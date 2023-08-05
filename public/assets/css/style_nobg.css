@@ -1,0 +1,31 @@
+
+.navbar {
+    background-color: var(--blue);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    color: white;
+}
+
+.logo_n img {
+    height: 30px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-links a {
+    color: white;
+    border-radius: 17px;
+    text-decoration: none;
+    padding: 10px 15px;
+}
+
+.nav-links a:hover {
+    background-color: var(--bluer);;
+}
