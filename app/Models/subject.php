@@ -18,6 +18,8 @@ class subject extends Model
         'grade_short',
         'total',
         'grade',
+        'rank',
+        'status',
         'Evaluation',
         'end_period',
     ];

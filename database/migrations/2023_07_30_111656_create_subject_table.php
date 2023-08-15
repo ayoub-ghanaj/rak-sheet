@@ -16,8 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('sheet_id');
             $table->string('subject');
             $table->string('subject_ar');
-            $table->float('grade_short');
+            $table->float('grade_short')->nullable();
             $table->float('total');
+            $table->string('status'); // 0->fail | 1-> good | 2-> best
+            $table->string('rank'); //  1-> 60 | 2-> 100
             $table->string('grade');
             $table->string('Evaluation')->nullable();
             $table->string('end_period')->nullable();

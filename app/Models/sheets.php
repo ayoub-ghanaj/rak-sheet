@@ -44,5 +44,9 @@ class sheets extends Model
         'absence',
         'latency',
         'table',
+        'status',
+        'message',
+        'class_drop',
+        'grade_drop',
     ];
 }

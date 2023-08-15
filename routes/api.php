@@ -14,6 +14,7 @@ use App\Http\Controllers\ApiController;
 |
 */
 
+Route::post('gettablelist', [ApiController::class, 'getTable_list']);
 Route::post('gettable', [ApiController::class, 'getTable']);
 Route::post('addsheets', [ApiController::class, 'addSheets']);
 Route::post('addstudents', [ApiController::class, 'addStudents']);

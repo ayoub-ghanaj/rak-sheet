@@ -16,7 +16,7 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="home-outline"></ion-icon>
             </span>
-            <span class="title">home</span>
+            <span class="title">الرئيسية</span>
         </a>
     </li>
     <li >
@@ -24,23 +24,43 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="add-circle-outline"></ion-icon>
             </span>
-            <span class="title">add</span>
+            <span class="title">اضافة</span>
         </a>
     </li>
+    @if($user->rank =="admin")
+    <li>
+        <a href="/app/subjects">
+            <span class="icon">
+                <ion-icon name="bookmarks-outline"></ion-icon>
+            </span>
+            <span class="title">المواد التقويمية </span>
+        </a>
+    </li>
+    @endif
     <li class="hovered">
         <a href="/app/list">
             <span class="icon">
                 <ion-icon name="list"></ion-icon>
             </span>
-            <span class="title">list</span>
+            <span class="title">لائحة</span>
         </a>
     </li>
+
+    <li class="delete_all">
+        <a>
+            <span class="icon">
+                <ion-icon name="trash-outline"></ion-icon>
+            </span>
+            <span class="title">حذف قاعدة اللبيانات</span>
+        </a>
+    </li>
+
     <li>
-        <a href="../app/logout">
+        <a href="/app/logout">
             <span class="icon">
                 <ion-icon name="log-out-outline"></ion-icon>
             </span>
-            <span class="title">Sign Out</span>
+            <span class="title">تسجيل خروج</span>
         </a>
     </li>
 @endsection
@@ -50,27 +70,35 @@ declare(strict_types=1);
     <h2 class="" style="margin-left: 40px; font-size: 30px;">بريدي واصل</h2>
 
     <style>
+
+
+
         .parent {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(7, 1fr);
-            grid-column-gap: 12px;
-            grid-row-gap: 13px;
-            height: 100vh;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            grid-column-gap: 14px;
+            grid-row-gap: 20px;
+            height: 80vh;
         }
-
-            .div1 { grid-area: 1 / 1 / 8 / 6;
-                background: #F4F4F4;
-                        border-radius: 32px;
-                        margin: 10px; }
-            .div2 { grid-area: 2 / 2 / 3 / 3; }
-            .div3 { grid-area: 2 / 3 / 3 / 4; }
-            .div4 { grid-area: 2 / 4 / 3 / 5; }
-            .div5 { grid-area: 3 / 3 / 4 / 4;
-                    display: grid;
-                align-items: center;
-                justify-content: center;
+            .div7 { grid-area: 1 / 1 / 6 / 7;
+                    background: #F4F4F4;
+                    border-radius: 32px;
+                    margin: 10px;
                 }
+            .div1 { grid-area: 2 / 2 / 3 / 3; }
+            .div2 { grid-area: 2 / 3 / 3 / 4; }
+            .div3 { grid-area: 2 / 4 / 3 / 5; }
+            .div4 { grid-area: 2 / 5 / 3 / 6; }
+            .div5 { grid-area: 3 / 4 / 4 / 5;
+                display: grid;
+                align-items: center;
+                justify-content: center; }
+            .div6 { grid-area: 3 / 3 / 4 / 4;
+                display: grid;
+                align-items: center;
+                justify-content: center; }
+
 
                 /* Style the dropdown arrow */
             .custom-select {
@@ -113,10 +141,15 @@ declare(strict_types=1);
             }
     </style>
     <div class="parent">
-        <div class="div1"> </div>
-        <div class="div2">
+        <div class="div7"> </div>
+        <div class="div1">
             <select class="custom-select year-sel">
                 <option selected style="display: none;">اختر السنة</option>
+            </select>
+        </div>
+        <div class="div2">
+            <select class="custom-select grade-sel">
+                <option selected style="display: none;">اختر المستوى</option>
             </select>
         </div>
         <div class="div3">
@@ -130,7 +163,10 @@ declare(strict_types=1);
             </select>
         </div>
         <div class="div5">
-                <button class="custom-button select-btn">التاكيد</button>
+                <button class="custom-button select-btn">لائحة تلاميذ</button>
+        </div>
+        <div class="div6">
+                <button class="custom-button stats-btn">احصائيات</button>
         </div>
     </div>
     @push('scripts')
@@ -165,7 +201,24 @@ declare(strict_types=1);
   }
 
   // Function to populate the class select based on the selected year
-  function populateClassSelect(selectedYear) {
+  function populateGradeSelect(selectedYear) {
+    var gradeSelect = $(".grade-sel");
+    gradeSelect.empty().append($('<option>', {
+      value: "",
+      text: "اختر المتسوى"
+    }));
+    var grades = [];
+    $.each(data, function(index, item) {
+      if (item.year === selectedYear && $.inArray(item.grade_drop, grades) === -1) {
+        grades.push(item.grade_drop);
+        gradeSelect.append($('<option>', {
+          value: item.grade_drop,
+          text: item.grade_drop
+        }));
+      }
+    });
+  }
+  function populateClassSelect( selectedYear,selectedGrade) {
     var classSelect = $(".class-sel");
     classSelect.empty().append($('<option>', {
       value: "",
@@ -174,26 +227,27 @@ declare(strict_types=1);
 
     var classes = [];
     $.each(data, function(index, item) {
-      if (item.year === selectedYear && $.inArray(item.class, classes) === -1) {
-        classes.push(item.class);
+      if (item.year === selectedYear && item.grade_drop === selectedGrade && $.inArray(item.class_drop, classes) === -1) {
+        classes.push(item.class_drop);
         classSelect.append($('<option>', {
-          value: item.class,
-          text: item.class
+          value: item.class_drop,
+          text: item.class_drop
         }));
       }
     });
   }
-
   // Function to populate the title select based on the selected year and class
-  function populateTitleSelect(selectedYear, selectedClass) {
+  function populateTitleSelect(selectedYear, selectedClass , selectedGrade) {
     var titleSelect =  $(".semester-sel");
     titleSelect.empty().append($('<option>', {
       value: "",
       text: "اختر دورة"
     }));
+    var titles = [];
 
     $.each(data, function(index, item) {
-      if (item.year === selectedYear && item.class === selectedClass) {
+      if (item.year === selectedYear && item.class_drop === selectedClass && item.grade_drop === selectedGrade && $.inArray(item.title1, titles) === -1) {
+        titles.push(item.title1);
         titleSelect.append($('<option>', {
           value: item.title1,
           text: translateTitle(item.title1)
@@ -204,15 +258,37 @@ declare(strict_types=1);
 
   // Document ready event
   $(document).ready(function() {
+    $(".delete_all").click(()=>{
+                    Swal.fire({
+                    title: 'تاكيد حذف قاعدة البيانات',
+                    html: `
+                    <form id="passwordForm"  action="/app/delete_all" method="post" style="">
+                        @csrf
+                        <input type="password" name="password" id="password" placeholder="Password" required style="display: block; margin: auto; margin-bottom: auto; margin-bottom: 17px;">
+                        <input type="submit"  value="تاكيد"/>
+                    </form>
+                    `,
+                    confirmButtonText: 'تاكيد',
+                    cancelButtonText: 'الغاء',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                }).then((result) => {
+                });
+                })
     populateYearSelect();
 
     // Year select change event
     $(".year-sel").change(function() {
       var selectedYear = $(this).val();
       if (selectedYear !== '') {
-        populateClassSelect(selectedYear);
-        $(".class-sel").trigger("change")
+        populateGradeSelect(selectedYear);
+        $(".grade-sel").trigger("change");
+        $(".class-sel").trigger("change");
       } else {
+        $(".grade-sel").empty().append($('<option>', {
+        value: "",
+        text: "اختر المستوى"
+        }));
         $(".class-sel").empty().append($('<option>', {
           value: "",
           text: "اختر الفصل"
@@ -227,10 +303,31 @@ declare(strict_types=1);
     // Class select change event
     $(".class-sel").change(function() {
       var selectedYear = $(".year-sel").val();
+      var selectedgrade = $(".grade-sel").val();
       var selectedClass = $(this).val();
       if (selectedYear !== '' && selectedClass !== '') {
-        populateTitleSelect(selectedYear, selectedClass);
+        populateTitleSelect(selectedYear, selectedClass, selectedgrade);
+
       } else {
+        $(".semester-sel").empty().append($('<option>', {
+          value: "",
+          text: "اختر دورة"
+        }));
+      }
+    });
+
+
+    $(".grade-sel").change(function() {
+      var selectedYear = $(".year-sel").val();
+      var selectedClass = $(this).val();
+      if (selectedYear !== '' && selectedClass !== '') {
+          populateClassSelect(selectedYear, selectedClass);
+          $(".class-sel").trigger("change");
+      } else {
+        $(".class-sel").empty().append($('<option>', {
+          value: "",
+          text: "اختر دورة"
+        }));
         $(".semester-sel").empty().append($('<option>', {
           value: "",
           text: "اختر دورة"
@@ -241,17 +338,41 @@ declare(strict_types=1);
         let year = $(".year-sel").val();
         let class_val = $(".class-sel").val();
         let semester =  $(".semester-sel").val();
-        if(year && class_val && semester){
-           
+        let grade =  $(".grade-sel").val();
+        if(year && class_val && semester && grade){
+
             // Create the URLSearchParams object
             const params = new URLSearchParams({
             year: year,
             class: class_val,
-            semester: semester
+            semester: semester,
+            grade : grade
             });
 
             // Create the final URL with the parameters
             const url = `/app/list/class?${params.toString()}`;
+
+            // Navigate to the URL
+            window.location.href = url;
+        }
+    });
+    $(".stats-btn").click(()=>{
+        let year = $(".year-sel").val();
+        let class_val = $(".class-sel").val();
+        // let semester =  $(".semester-sel").val();
+        let grade =  $(".grade-sel").val();
+        if(year && class_val && grade){
+
+            // Create the URLSearchParams object
+            const params = new URLSearchParams({
+            year: year,
+            class: class_val,
+            // semester: semester,
+            grade : grade
+            });
+
+            // Create the final URL with the parameters
+            const url = `/app/list/class_stats?${params.toString()}`;
 
             // Navigate to the URL
             window.location.href = url;

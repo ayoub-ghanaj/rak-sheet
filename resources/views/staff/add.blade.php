@@ -24,7 +24,7 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="home-outline"></ion-icon>
             </span>
-            <span class="title">home</span>
+            <span class="title">الرئيسية</span>
         </a>
     </li>
 
@@ -34,29 +34,95 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="add-circle-outline"></ion-icon>
             </span>
-            <span class="title">add</span>
+            <span class="title">اضافة</span>
         </a>
     </li>
+    @if($user->rank =="admin")
+    <li>
+        <a href="/app/subjects">
+            <span class="icon">
+                <ion-icon name="bookmarks-outline"></ion-icon>
+            </span>
+            <span class="title">المواد التقويمية </span>
+        </a>
+    </li>
+    @endif
     <li>
         <a href="/app/list">
             <span class="icon">
                 <ion-icon name="list"></ion-icon>
             </span>
-            <span class="title">list</span>
+            <span class="title">لائحة</span>
+        </a>
+    </li>
+    <li class="delete_all">
+        <a>
+            <span class="icon">
+                <ion-icon name="trash-outline"></ion-icon>
+            </span>
+            <span class="title">حذف قاعدة اللبيانات</span>
         </a>
     </li>
     <li>
-        <a href="../app/logout">
+        <a href="/app/logout">
             <span class="icon">
                 <ion-icon name="log-out-outline"></ion-icon>
             </span>
-            <span class="title">Sign Out</span>
+            <span class="title">تسجيل خروج</span>
         </a>
     </li>
 @endsection
 
 
 @section('content')
+    <style>
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Styling for select boxes */
+    select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Hover effect */
+    input[type="text"]:hover,
+    input[type="email"]:hover,
+    input[type="password"]:hover,
+    select:hover {
+        border-color: #666;
+    }
+
+    /* Focus effect */
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px #3498db;
+    }
+    .wimax{
+        width:100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .wimax input{
+        width:100%;
+    }
+    </style>
     <h2 class="" style="margin-left: 40px; font-size: 30px;">بريدي واصل</h2>
 
 
@@ -67,24 +133,24 @@ declare(strict_types=1);
             @csrf
             <div class="parent">
                 <div class="card card1">
+                    <label class='class_data'>  غير محدد </label>
+                    <button class="btn-dark class-link">
+                        <ion-icon name="chatbubbles"></ion-icon>
+                        اختار القسم
+                    </button>
+                </div>
+                <div class="card card2">
                     <label class='std-count'> 0 عدد طلاب</label>
                     <button class="btn-dark upload-students">
                         <ion-icon name="cloud-upload"></ion-icon>
                         رفع قاعدة بيانات الطالب
                     </button>
                 </div>
-                <div class="card card2">
+                <div class="card card3">
                     <label class='sheet-count'> 0 عدد نتائج </label>
                     <button class="btn-dark upload-sheets">
                         <ion-icon name="list"></ion-icon>
                         رفع قاعدة بيانات النتائج
-                    </button>
-                </div>
-                <div class="card card3">
-                    <label>  غير نشط </label>
-                    <button class="btn-dark whats-link">
-                        <ion-icon name="chatbubbles"></ion-icon>
-                        ربط الواتساب
                     </button>
                 </div>
             </div>
@@ -97,19 +163,19 @@ declare(strict_types=1);
     <div class="table" style="width: 90%;  ">
 
         <div class="headeer">
-            <span style="width: 25%;">اسم</span>
-            <span style="width: 20%;">رقم تعريف</span>
-            <span style="width: 20%;">الفصل</span>
-            <span style="width: 20%;">رقم الصف</span>
-            <span style="width: 20%;">الجوال</span>
-            <span style="width: 12%;">رسالة </span>
-            <span style="width: 15%;">حالة</span>
+            <span style="width: 27%;">اسم</span>
+            <span style="width: 22%;">رقم تعريف</span>
+            <span style="width: 22%;">الفصل</span>
+            <span style="width: 22%;">رقم الصف</span>
+            <span style="width: 22%;">الجوال</span>
+            {{-- <span style="width: 12%;">رسالة </span> --}}
+            <span style="width: 17%;">حالة</span>
         </div>
 
         <div class="bodyy" style="border: none;">
             <div class="tableau">
 
-                <div class="info">
+                {{-- <div class="info">
                     <span style="width: 25%;">Soulaiman</span>
                     <span style="width: 20%;">1231212</span>
                     <span style="width: 20%;">AE6</span>
@@ -126,7 +192,7 @@ declare(strict_types=1);
                         </a>
                     </span>
 
-                </div>
+                </div> --}}
             </div>
 
             {{-- <input type="button" id="Validbtn" disabled
@@ -145,12 +211,126 @@ declare(strict_types=1);
 <script>
     const url = window.location.origin;
     var ids = {};
+    var drop_class = "";
+    var drop_grade = "";
+    var message_low = "";
+    var message_mid = "";
+    var message_high = "";
     // var students_list = {};
     var sheets_list = {};
     const user = JSON.parse(`{!! json_encode($user, JSON_HEX_TAG) !!}`);
     const api = JSON.parse(`{!! json_encode($api, JSON_HEX_TAG) !!}`);
     $(()=>{
-        console.log(api)
+
+        $(".delete_all").click(()=>{
+                    Swal.fire({
+                    title: 'تاكيد حذف قاعدة البيانات',
+                    html: `
+                    <form id="passwordForm"  action="/app/delete_all" method="post" style="">
+                        @csrf
+                        <input type="password" name="password" id="password" placeholder="Password" required style="display: block; margin: auto; margin-bottom: auto; margin-bottom: 17px;">
+                        <input type="submit"  value="تاكيد"/>
+                    </form>
+                    `,
+                    confirmButtonText: 'تاكيد',
+                    cancelButtonText: 'الغاء',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                }).then((result) => {
+                });
+                })
+
+
+
+        $(".class-link").click(()=>{
+            Swal.fire({
+                    title: 'Select Options',
+                    html:
+                        `
+                        <div class="wimax">
+                            <div class="wimax">
+                                <label> 
+                                    اختر المستوى
+                                </label> 
+                                <select id="combo1" class="swal2-input">
+                                    <option value="" selected style="display:none;">اختر المستوى</option>
+                                    <option value="mid">متوسط</option>
+                                    <option value="high">ثانوي</option>
+                                </select>
+                            </div>
+                            <div class="wimax">
+                                <label> 
+                                    اختر القسم
+                                </label> 
+                                <select id="combo2" class="swal2-input">
+                                    <option value="" selected style="display:none;">اختر القسم</option>
+                                    <option value="1">اول</option>
+                                    <option value="3">ثاني </option>
+                                    <option value="2">ثالث</option>
+                                </select>
+                            </div>
+
+                            <div class="wimax">
+                                <label> 
+                                    رسالة للمتميزين
+                                </label> 
+                                <input type="text" placeholder="" class="high_msg" />
+                            </div>
+                            <div class="wimax">
+                                <label> 
+                                    رسالة للمتفوقين
+                                </label> 
+                                <input type="text" placeholder="" class="mid_msg" />
+                            </div>
+                            <div class="wimax">
+                                <label> 
+                                    رسالة للضعاف
+                                </label> 
+                                <input type="text" placeholder="" class="low_msg" />
+                            </div>
+                        </div>
+                        `,
+                    confirmButtonText: 'Submit',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        return {
+                            msg_low: $('.low_msg').val(),
+                            msg_mid: $('.mid_msg').val(),
+                            msg_high: $('.high_msg').val(),
+                            combo1: $('#combo1').val(),
+                            combo2: $('#combo2').val()
+                        };
+                    }
+                }).then(result => {
+                    if (result.isConfirmed) {
+
+                        message_low= result.value.msg_low;
+                        message_mid= result.value.msg_mid;
+                        message_high= result.value.msg_high;
+
+                        const combo1Value = result.value.combo1;
+                        const combo2Value = result.value.combo2;
+                        console.log('Combo 1 Selected:', combo1Value);
+                        console.log('Combo 2 Selected:', combo2Value);
+                        // Store values in variables
+                        let class_ar = combo2Value === "1"? "اول" : ((combo2Value)=== "2" ? "ثاني":  ((combo2Value)=== "3" ? "ثالت": ""));
+                        let grad_ar = combo1Value === "mid"? "متوسط" : ((combo1Value)=== "high" ? "ثانوي":  "");
+                        if(class_ar && grad_ar){
+                            drop_grade = combo1Value;
+                            drop_class = combo2Value;
+                            let ar =  grad_ar + " : " +class_ar
+                            $(".class_data").text(`${ar}`);
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: '',
+                                text: 'المرجو اعادة اختيار بعناية',
+                            });
+                        }
+                        // You can perform further actions here with the selected values
+                    }
+                });
+        })
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         $(".upload-sheets").click(()=>{
             if(ids.length > 0){
@@ -362,7 +542,15 @@ declare(strict_types=1);
         reader.readAsArrayBuffer(file);
         });
         $(".upload-students").click(()=>{
-            $(".students-val").trigger("click");
+            if( drop_class && drop_grade){
+                $(".students-val").trigger("click");
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: '',
+                    text: 'المرجو اختيار المستوىى اولا',
+                })
+            }
         })
         $(".students-val").change(()=>{
 
@@ -444,17 +632,12 @@ declare(strict_types=1);
                     if(student.id_number){
                         $(".tableau").append(`
                             <div class="info info-${student.id_number}">
-                                <span style="width: 25%;">${student.name}</span>
-                                <span style="width: 20%;">${student.id_number}</span>
-                                <span style="width: 20%;">${student.class   }</span>
-                                <span style="width: 20%;">${student.class_number}</span>
-                                <span style="width: 20%;">${student.phone}</span>
-                                <span style="width: 12% ">
-                                    <button value="SEND" class="btnReponde link-${student.id_number}">
-                                        <ion-icon name="hourglass"></ion-icon>
-                                    </button>
-                                </span>
-                                <span style="width: 15% ">
+                                <span style="width: 27%;">${student.name}</span>
+                                <span style="width: 22%;">${student.id_number}</span>
+                                <span style="width: 22%;">${student.class   }</span>
+                                <span style="width: 22%;">${student.class_number}</span>
+                                <span style="width: 22%;">${student.phone}</span>
+                                <span style="width: 17% ">
                                     <a href="" class="btnReponde status-${student.id_number}">
                                         <ion-icon name="close-circle-outline"></ion-icon>
                                     </a>
@@ -498,7 +681,12 @@ declare(strict_types=1);
     $.ajax({
       url: `${url}/api/addsheets`,
       method: 'POST',
-      data: JSON.stringify({ data: data, id: user.id }),
+      data: JSON.stringify({ data: data, id: user.id ,     
+        drop_class_data : drop_class, 
+        drop_grade_data : drop_grade, 
+        message_low_data : message_low, 
+        message_mid_data : message_mid, 
+        message_high_data : message_high, } ),
       headers: {
         'X-CSRF-TOKEN': user.token_api,
         'Content-Type': 'application/json', // Set Content-Type to application/json

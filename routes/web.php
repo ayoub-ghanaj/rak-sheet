@@ -24,19 +24,25 @@ Route::get('/result', [SearchController::class, 'search']);
 // Route::get('/app/send', [UserController::class, 'sendshow'])
 //     ->name('staff.home');
 
+
+
 Route::get('/app/add', [UserController::class, 'addshow'])
-    ->name('staff.home');
+    ->name('staff.add');
 
 Route::get('/search', [UserController::class, 'lookup'])
     ->name('staff.lookup');
 
-Route::get('/app/list/class', [UserController::class, 'list_class'])
-    ->name('staff.home');
-Route::get('/app/list', [UserController::class, 'list'])
-    ->name('staff.home');
+Route::get('/app/list/class_stats', [UserController::class, 'list_class_stats'])
+    ->name('staff.class');
 
-Route::get('/app/account', [UserController::class, 'account'])
-    ->name('staff.home');
+Route::get('/app/list/class', [UserController::class, 'list_class'])
+    ->name('staff.class');
+
+Route::get('/app/list', [UserController::class, 'list'])
+    ->name('staff.list');
+
+// Route::get('/app/account', [UserController::class, 'account'])
+//     ->name('staff.account');
 
 Route::get('/app/home', [UserController::class, 'index'])
     ->name('staff.home');
@@ -51,6 +57,9 @@ Route::get('app/', [UserController::class, 'index'])
 Route::get('app/login', [UserController::class, 'login'])
     ->name('staff.login');
 
+Route::post('/app/delete_all', [UserController::class, 'dropdb'])
+    ->name('staff.db_delete');
+
 Route::post('app/login', [UserController::class, 'handleLogin'])
     ->name('staff.handleLogin');
 
@@ -64,11 +73,12 @@ Route::post('app/register', [UserController::class, 'make'])
     ->name('staff.handlRegister');
 
 
-
-
-
-// Auth::routes();
-
+Route::get('/app/subjects', [UserController::class, 'low_subs'])->name('low_subjects.index');
+Route::get('/app/subjects/{id}/edit', [UserController::class, 'low_subs_ed_index'])->name('low_subjects.edit');
+Route::put('/app/subjects/{id}', [UserController::class, 'low_subs_update'])->name('low_subjects.update');
+Route::delete('/app/subjects/{id}', [UserController::class, 'low_subs_destroy'])->name('low_subjects.destroy');
+Route::get('/app/subjects/add', [UserController::class, 'low_subs_ad_index'])->name('low_subjects.create');
+Route::post('/app/subjects/create', [UserController::class, 'low_subs_add'])->name('low_subjects.create_put');
 // Route::get('/', [HomeController::class, 'index'])->name('home');
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 

@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('rank')->default("user");
             $table->string('token_api');
             $table->rememberToken();
-            $table->timestamp('first_sent'); // set to now after 30 days //on every login // and 
-            $table->integer('count'); // count sends
+            $table->timestamp('first_sent')->nullable(); // set to now after 30 days //on every login // and 
+            $table->integer('count')->nullable(); // count sends
             $table->timestamps();
         });
     }

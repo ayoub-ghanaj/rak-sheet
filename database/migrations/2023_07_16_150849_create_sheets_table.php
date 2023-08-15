@@ -20,6 +20,10 @@ return new class extends Migration
             $table->string('id_number');
 
 
+            $table->float('status');
+            $table->string('message')->nullable();
+            $table->string('class_drop');
+            $table->string('grade_drop');
 
             $table->string('state');
             $table->string('state_ar');
@@ -39,7 +43,7 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('name_ar');
-            
+
             $table->string('class');
 
             $table->string('nationality');

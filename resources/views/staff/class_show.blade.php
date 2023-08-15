@@ -16,7 +16,7 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="home-outline"></ion-icon>
             </span>
-            <span class="title">home</span>
+            <span class="title">الرئيسية</span>
         </a>
     </li>
     <li >
@@ -24,23 +24,41 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="add-circle-outline"></ion-icon>
             </span>
-            <span class="title">add</span>
+            <span class="title">اضافة</span>
         </a>
     </li>
+    @if($user->rank =="admin")
+    <li>
+        <a href="/app/subjects">
+            <span class="icon">
+                <ion-icon name="bookmarks-outline"></ion-icon>
+            </span>
+            <span class="title">المواد التقويمية </span>
+        </a>
+    </li>
+    @endif
     <li class="hovered">
         <a href="/app/list">
             <span class="icon">
                 <ion-icon name="list"></ion-icon>
             </span>
-            <span class="title">list</span>
+            <span class="title">لائحة</span>
+        </a>
+    </li>
+    <li class="delete_all">
+        <a>
+            <span class="icon">
+                <ion-icon name="trash-outline"></ion-icon>
+            </span>
+            <span class="title">حذف قاعدة اللبيانات</span>
         </a>
     </li>
     <li>
-        <a href="../app/logout">
+        <a href="/app/logout">
             <span class="icon">
                 <ion-icon name="log-out-outline"></ion-icon>
             </span>
-            <span class="title">Sign Out</span>
+            <span class="title">تسجيل خروج</span>
         </a>
     </li>
 @endsection
@@ -63,16 +81,16 @@ declare(strict_types=1);
     /* .div2 { grid-area: 1 / 2 / 2 / 3; } */
     .div3 { grid-area: 1 / 3 / 2 / 4; }
     .div4 { grid-area: 1 / 1 / 2 / 2; }
-    .div5 { grid-area: 2 / 1 / 5 / 5; 
+    .div5 { grid-area: 2 / 1 / 5 / 5;
             background-color: #f8f8f8; /* Light gray background */
             padding: 20px; /* Add some padding around the content */
             border: 1px solid #ccc; /* Add a border to further separate it from the background */
             border-radius: 8px; /* Add some border radius to make it look more rounded */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow to give it depth*/
             height: max-content;
-          }  
+          }
     .div6 { grid-area: 1 / 2 / 2 / 3; }
-    .div7 { grid-area: 1 / 5 / 9 / 6; 
+    .div7 { grid-area: 1 / 5 / 9 / 6;
       max-height: 100vh; /* Set a fixed height as per your requirement */
       overflow-y: auto;
       border: #cecece 1px solid;
@@ -85,7 +103,7 @@ declare(strict_types=1);
             border-radius: 8px; /* Add some border radius to make it look more rounded */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow to give it depth*/
             height: max-content;
-          }  
+          }
 
                 /* Style the dropdown arrow */
             .custom-select {
@@ -229,29 +247,29 @@ declare(strict_types=1);
   cursor: pointer;
 }
 .swal2-modal{
-            width :80vw !important; 
+            width :80vw !important;
         }
     </style>
     <div class="parent">
-      <div class="div1 count-succ"> 
+      <div class="div1 count-succ">
         <div class="card">
           <div class="small-title">عدد طلاب</div>
           <div class="value all-count-val-succ"></div>
           <div class="main-title">المتفوقين</div>
-        </div>  
+        </div>
       </div>
-      <div class="div2 count-nata" style="display : none;" > 
+      <div class="div2 count-nata" style="display : none;" >
         <div class="card">
           <div class="small-title">عدد النتائج</div>
           <div class="value all-count-sheet"></div>
-        </div>  
+        </div>
       </div>
       <div class="div3 count-suck">
         <div class="card">
           <div class="small-title">عدد طلاب</div>
           <div class="value all-count-val-suck"></div>
           <div class="main-title">الضعاف</div>
-        </div>  
+        </div>
       </div>
       <div class="div4 bg"> </div>
       <div class="div5 succ">
@@ -267,13 +285,13 @@ declare(strict_types=1);
           <div class="small-title">عدد طلاب</div>
           <div class="value all-count-val"></div>
           <div class="main-title">المجموع</div>
-        </div>  
+        </div>
        </div>
       <div class="div7 right">
         <h3> لائحة الطلاب <h3>
-        <table style="width: 100%; margin-top : 20px;"  border="1"> 
+        <table style="width: 100%; margin-top : 20px;"  border="1">
          <thead>
-           <tr> 
+           <tr>
              <td>name</td>
              <td>id</td>
              <td>search</td>
@@ -282,7 +300,7 @@ declare(strict_types=1);
           <tbody class="all-students">
 
           </tbody>
-        </table>  
+        </table>
       </div>
       <div class="div8 loose">
         <h4> لائحة الطلبة غير المفوقين </h4>
@@ -292,13 +310,31 @@ declare(strict_types=1);
           </div>
         </div>
       </div>
-      </div> 
+      </div>
     @push('scripts')
         <script>
-            const url = window.location.origin;;
+            const url = window.location.origin;
             const data = {!! json_encode($data) !!};
             const user = JSON.parse(`{!! json_encode($user, JSON_HEX_TAG) !!}`);
             $(()=>{
+
+                $(".delete_all").click(()=>{
+                    Swal.fire({
+                    title: 'تاكيد حذف قاعدة البيانات',
+                    html: `
+                    <form id="passwordForm"  action="/app/delete_all" method="post" style="">
+                        @csrf
+                        <input type="password" name="password" id="password" placeholder="Password" required style="display: block; margin: auto; margin-bottom: auto; margin-bottom: 17px;">
+                        <input type="submit"  value="تاكيد"/>
+                    </form>
+                    `,
+                    confirmButtonText: 'تاكيد',
+                    cancelButtonText: 'الغاء',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                }).then((result) => {
+                });
+                })
               console.log(data);
               $(".all-count-val").text(data[1].length)
               $(".all-count-sheet").text(data[0][0].count_sheet)
@@ -306,7 +342,7 @@ declare(strict_types=1);
               $(".all-count-val-suck").text(data[3].length)
               data[1].forEach((item, index)=>{
                 $(".all-students").append(`
-                <tr> 
+                <tr>
                   <td>${item.name}</td>
                   <td>${item.id_number}</td>
                   <td><a href="/result?q=${item.id_number}"> <button class="custom-button" >search<button> </a></td>
@@ -316,14 +352,14 @@ declare(strict_types=1);
               data[2].forEach((item, index)=>{
                 $(".succ-cards").append(`
                 <div class="card">
-                  <div class="card-id">عدد مواد :${item.subject_count}</div>
+                  <div class="card-id">عدد مواد :${ JSON.parse(item.table).length}</div>
                   <div class="card-name">${item.id_number}</div>
                   <button class="card-button check-${item.id_number}">مراجعة</button>
-                </div>  
+                </div>
                 `)
                 $(`.check-${item.id_number}`).click(()=>{
                   // alert(item.sheet_id);
-                  uploadsheets(url, item.sheet_id).then((res)=>{
+                  uploadsheets(url, item.id).then((res)=>{
                     console.log(res[0].table);
                     // console.log(JSON.parse(res[0].table));
                     const data_api = JSON.parse(res[0].table);
@@ -340,13 +376,13 @@ declare(strict_types=1);
               data[3].forEach((item, index)=>{
                 $(".suck-cards").append(`
                 <div class="card">
-                  <div class="card-id">عدد مواد :${item.subject_count}</div>
+                  <div class="card-id">عدد مواد :${JSON.parse(item.table).length}</div>
                   <div class="card-name">${item.id_number}</div>
                   <button class="card-button check-${item.id_number}">مراجعة</button>
-                </div>  
+                </div>
                 `)
                 $(`.check-${item.id_number}`).click(()=>{
-                  uploadsheets(url, item.sheet_id).then((res)=>{
+                  uploadsheets(url, item.id).then((res)=>{
                     console.log(res[0].table);
                     // console.log(JSON.parse(res[0].table));
                     const data_api = JSON.parse(res[0].table);
@@ -407,13 +443,13 @@ declare(strict_types=1);
             // Apply conditional styles based on the Totale value
             const totalCell = row.querySelector("td:nth-child(3)");
             const totalValue = parseFloat(totalCell.textContent);
-            if (totalValue <= 50) {
-              totalCell.style.backgroundColor = "red";
-              totalCell.style.color = "white";
-            } else {
-              totalCell.style.backgroundColor = "green";
-              totalCell.style.color = "white";
-            }
+            // if (totalValue <= 50) {
+            //   totalCell.style.backgroundColor = "red";
+            //   totalCell.style.color = "white";
+            // } else {
+            //   totalCell.style.backgroundColor = "green";
+            //   totalCell.style.color = "white";
+            // }
 
             table.appendChild(row);
           });

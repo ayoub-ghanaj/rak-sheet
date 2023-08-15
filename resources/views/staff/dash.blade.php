@@ -24,7 +24,7 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="home-outline"></ion-icon>
             </span>
-            <span class="title">home</span>
+            <span class="title">الرئيسية</span>
         </a>
     </li>
     <li >
@@ -32,23 +32,41 @@ declare(strict_types=1);
             <span class="icon">
                 <ion-icon name="add-circle-outline"></ion-icon>
             </span>
-            <span class="title">add</span>
+            <span class="title">اضافة</span>
         </a>
     </li>
+    @if($user->rank =="admin")
+    <li>
+        <a href="/app/subjects">
+            <span class="icon">
+                <ion-icon name="bookmarks-outline"></ion-icon>
+            </span>
+            <span class="title">المواد التقويمية </span>
+        </a>
+    </li>
+    @endif
     <li>
         <a href="/app/list">
             <span class="icon">
                 <ion-icon name="list"></ion-icon>
             </span>
-            <span class="title">list</span>
+            <span class="title">لائحة</span>
+        </a>
+    </li>
+    <li class="delete_all">
+        <a>
+            <span class="icon">
+                <ion-icon name="trash-outline"></ion-icon>
+            </span>
+            <span class="title">حذف قاعدة اللبيانات</span>
         </a>
     </li>
     <li>
-        <a href="../app/logout">
+        <a href="/app/logout">
             <span class="icon">
                 <ion-icon name="log-out-outline"></ion-icon>
             </span>
-            <span class="title">Sign Out</span>
+            <span class="title">تسجيل خروج</span>
         </a>
     </li>
 @endsection
@@ -138,6 +156,25 @@ declare(strict_types=1);
                 }
             }
             $(()=>{
+
+
+                $(".delete_all").click(()=>{
+                    Swal.fire({
+                    title: 'تاكيد حذف قاعدة البيانات',
+                    html: `
+                    <form id="passwordForm"  action="/app/delete_all" method="post" style="">
+                        @csrf
+                        <input type="password" name="password" id="password" placeholder="Password" required style="display: block; margin: auto; margin-bottom: auto; margin-bottom: 17px;">
+                        <input type="submit"  value="تاكيد"/>
+                    </form>
+                    `,
+                    confirmButtonText: 'تاكيد',
+                    cancelButtonText: 'الغاء',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                }).then((result) => {
+                });
+                })
                 if(!sub){
                     showSubscribePopup();
                 }
